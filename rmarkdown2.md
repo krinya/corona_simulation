@@ -2,13 +2,16 @@
 title: "corona simulation"
 author: "Kristof Menyhert"
 date: "4/22/2020"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 Before we start we need to load some of the packages
 
 ### Load some packages:
-```{r, warning=FALSE, error=FALSE, tidy = T}
+
+```r
 library(data.table)
 library(tidyr)
 library(ggplot2); theme_set(theme_bw())
@@ -23,7 +26,8 @@ After this we can start to create our simulation model.
 
 ## Create the initial parameters:
 
-```{r, tidy = T}
+
+```r
 #initial parameters
 
 # Number of days
@@ -46,7 +50,8 @@ D_0 <- 0
 
 ## The main function to generate data
 
-```{r, tidy = T}
+
+```r
 create_data <- function(alpha = 0.2, beta = 1.75, gamma = 0.5, rho = 0, dr = 0.05){
   
   #alpha: infection rate (0-1)
@@ -101,45 +106,58 @@ create_data <- function(alpha = 0.2, beta = 1.75, gamma = 0.5, rho = 0, dr = 0.0
 
 ## Generate data
 
-```{r, tidy = T}
+
+```r
 dataSimulation <- create_data(alpha = 0.2, beta = 1.75, gamma = 0.5, rho = 0 , dr = 0.05)
 ```
 
 ## Convert the data from wide to long for plotting
 
-```{r, tidy = T}
+
+```r
 longData <- gather(dataSimulation, type, value, S:population, factor_key=TRUE)
 setDT(longData)
 ```
 
 ## Create the curves
 
-```{r, tidy = T}
+
+```r
 plot <- ggplot(longData, aes(x = t, y = value)) + geom_line(aes(color = type), size = 1)
 plot
 ```
 
+![](rmarkdown2_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 ## Create the curves using animation
 
-```{r, tidy = T}
+
+```r
 ggplot(longData, aes(x = t, y = value)) +
   geom_line(aes(color = type), size = 1) +
   transition_reveal(t)
 ```
 
+![](rmarkdown2_files/figure-html/unnamed-chunk-7-1.gif)<!-- -->
+
 ### Generate another plot with different parameters
 
-```{r, tidy = T}
+
+```r
 dataSimulation_2 <- create_data(alpha = 0.2, beta = 1.2, gamma = 0.5, rho = 0 , dr = 0.05)
 longData_2 <- gather(dataSimulation_2, type, value, S:population, factor_key=TRUE)
 ```
 
-```{r, tidy = T}
+
+```r
 plot2 <- ggplot(longData_2, aes(x = t, y = value)) + geom_line(aes(color = type), size = 1)
 ```
 
-```{r, tidy = T, fig.width = 12, fig.height = 6}
+
+```r
 grid.arrange(plot, plot2, nrow = 1)
 ```
+
+![](rmarkdown2_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 

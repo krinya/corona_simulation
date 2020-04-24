@@ -2,7 +2,9 @@
 title: "corona simulation"
 author: "Kristof Menyhert"
 date: "4/22/2020"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 Before we start we need to load some of the packages
